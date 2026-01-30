@@ -2,60 +2,101 @@ import streamlit as st
 import pandas as pd
 import os
 from runner import run_campaign
-from config.content import SENDER_NAME, EMAIL_SUBJECT
+from config.content import SENDER_NAME, EMAIL_SUBJECT, EMAIL_BODY_TEXT
 
-# Configuração da Página
-st.set_page_config(page_title="Spock's Mailer", page_icon="🖖", layout="wide")
+# --- PAGE CONFIGURATION ---
+st.set_page_config(
+    page_title="Spock's SMTP Automator",
+    page_icon="🖖",
+    layout="wide"
+)
 
-st.title("📧 Resilient SMTP Automator")
-st.markdown(f"**Welcome back, {SENDER_NAME}!** Prepare your campaign below.")
+# --- CUSTOM CSS FOR BETTER UI ---
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f5f7f9;
+    }
+    .stButton>button {
+        width: 100%;
+        border-radius: 5px;
+        height: 3em;
+        background-color: #2980b9;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-# --- SIDEBAR: Configurações ---
+# --- HEADER ---
+st.title("📧 Smart & Resilient SMTP Automator")
+st.markdown(f"**Welcome, {SENDER_NAME}.** Use this dashboard to manage your professional email campaigns.")
+
+# --- SIDEBAR: CREDENTIALS & SECURITY ---
 with st.sidebar:
-    st.header("⚙️ Configuration")
-    sender_email = st.text_input("Your Email", placeholder="email@gmail.com")
-    app_password = st.text_input("App Password", type="password")
+    st.header("🔐 Authentication")
+    st.info("Your credentials are used only for the current session and are not stored permanently.")
+    
+    email_user = st.text_input("Sender Email", placeholder="your-email@gmail.com")
+    email_pass = st.text_input("Google App Password", type="password", help="16-digit password generated in Google Security settings.")
     
     st.divider()
-    st.info("Ensure your 16-digit App Password is ready.")
+    st.markdown("### 🖖 Status: **Ready**")
 
-# --- MAIN: Interface de Usuário ---
-col1, col2 = st.columns(2)
+# --- MAIN INTERFACE: CONFIGURATION ---
+col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.subheader("📝 Message Personalization")
+    st.subheader("📝 Content Personalization")
     subject = st.text_input("Email Subject", value=EMAIL_SUBJECT)
-    message_body = st.text_area("Message Body", height=300, 
-                                help="Use {company} and {sender_name} as placeholders.")
+    body = st.text_area("Email Body (Plain Text)", value=EMAIL_BODY_TEXT, height=350)
+    
+    st.caption("Available Placeholders: `{company}`, `{sender_name}`")
 
 with col2:
-    st.subheader("👥 Target List")
-    uploaded_file = st.file_file("Upload contacts.csv", type="csv")
+    st.subheader("👥 Target Database")
+    uploaded_file = st.file_uploader("Upload your contacts.csv", type="csv")
     
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
-        st.dataframe(df, use_container_width=True)
-        # Salva o arquivo temporariamente para o core processar
+        st.success(f"Loaded {len(df)} contacts successfully!")
+        st.dataframe(df, use_container_width=True, height=250)
+        
+        # Save locally for the runner logic
         df.to_csv("data/contacts.csv", index=False)
     else:
-        st.warning("Please upload a CSV file to begin.")
+        st.warning("Please upload a CSV file with 'company' and 'email' columns.")
 
-# --- EXECUTION ---
+# --- CAMPAIGN EXECUTION ---
 st.divider()
 
-if st.button("🚀 Start Campaign", use_container_width=True):
-    if not sender_email or not app_password:
-        st.error("Please provide credentials in the sidebar.")
+if st.button("🚀 LAUNCH CAMPAIGN"):
+    if not email_user or not email_pass:
+        st.error("❌ Error: Please provide your SMTP credentials in the sidebar.")
     elif not uploaded_file:
-        st.error("No contacts loaded.")
+        st.error("❌ Error: No contact list detected.")
     else:
-        # Atualiza as variáveis de ambiente em tempo de execução
-        os.environ["SENDER_EMAIL"] = sender_email
-        os.environ["APP_PASSWORD"] = app_password
+        # Set Environment Variables temporarily for the core modules
+        os.environ["SENDER_EMAIL"] = email_user
+        os.environ["APP_PASSWORD"] = email_pass
         
-        with st.status("Sending emails...", expanded=True) as status:
-            # Aqui chamamos a sua função original de campanha
-            # Nota: Você pode precisar adaptar o run_campaign para retornar logs para o Streamlit
-            run_campaign() 
+        # UI Container for real-time logs
+        status_container = st.container()
+        
+        with st.status("Initializing Engine...", expanded=True) as status:
+            # Call the updated runner logic
+            run_campaign(status_container)
             status.update(label="Campaign Finished!", state="complete", expanded=False)
-            st.success("All emails processed successfully! 🖖")
+        
+        st.balloons()
+        st.success("🖖 Live Long and Prosper. All emails processed!")
+
+# --- DASHBOARD: POST-CAMPAIGN ANALYTICS ---
+if os.path.exists("data/finished.csv"):
+    st.divider()
+    st.subheader("📊 Last Campaign Analytics")
+    finished_df = pd.read_csv("data/finished.csv")
+    
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Total Processed", len(finished_df))
+    c2.metric("Success Rate", f"{(len(finished_df[finished_df['status'] == 'SUCCESS']) / len(finished_df) * 100):.1f}%")
+    c3.metric("Failures", len(finished_df[finished_df['status'] == 'FAILED']))
