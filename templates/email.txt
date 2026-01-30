@@ -1,0 +1,7 @@
+{greeting}
+
+I am applying for an internship at {company_name}.
+Attached are my documents.
+
+Best regards,
+{sender_name}
