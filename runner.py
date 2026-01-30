@@ -77,8 +77,8 @@ def send_single_email(server, company, email):
     
     while attempts < max_retries:
         try:
-            # Personalization with 'Spoke'
-            msg = build_message(company, email, "Spoke") 
+            # Personalization updated to 'Spock'
+            msg = build_message(company, email, "Spock") 
             if msg:
                 server.send_message(msg)
                 return True, None
