@@ -1,95 +1,37 @@
-```markdown
-# 📧 Resilient SMTP Email Sender (Law Internship Automation)
 
-A professional-grade Python automation engine designed to send summaries and cover letters to law firms. This project focuses on **resilience**, **security**, and **anti-spam techniques** to ensure high delivery rates and account security.
-
-
-
-## 🚀 Key Engineering Features
-
-Unlike simple scripts, this engine implements advanced networking and automation patterns:
-
-* **Exponential Backoff with Jitter:** Prevents "Thundering Herd" problems by randomizing retry times if the SMTP server is busy or the connection flickers.
-* **Intelligent Rate Limiting:** Simulates human behavior with randomized delays between emails and a daily cap (e.g., 50 emails/day) to protect your Gmail account from being flagged as spam.
-* **Atomic Transactions:** Ensures contacts are only moved to the "finished" list after successful delivery, preventing data loss.
-* **Modular Architecture:** Clean separation of concerns between SMTP logic, content building, and contact management.
-* **Environment Security:** Sensitive credentials are never hardcoded, utilizing `.env` files and `os.getenv`.
-
-## 🛠️ Project Structure
-
-```text
+📧 Smart & Resilient SMTP Automator
+A professional-grade Python automation engine designed for secure, automated, and anti-blocking email campaigns. This project focuses on simulating human behavior to ensure high deliverability rates and protect your sender reputation when reaching out to multiple recipients (e.g., Law Firms, Recruiters, or Leads).
+🛡️ Anti-Blocking & Anti-Spam Engineering
+Unlike basic scripts that trigger spam filters by sending bursts of data, this engine implements advanced networking patterns to stay under the radar:
+ * Intelligent Rate Limiting: Implements randomized delays between sends and a daily cap (e.g., 50 emails/day) to maintain a healthy sender reputation.
+ * Exponential Backoff with Jitter: If the SMTP server is busy or a connection flickers, the script uses a randomized retry strategy to prevent "Thundering Herd" problems.
+ * Human-Like Pacing: Variable wait times prevent bot-detection algorithms from flagging the account as an automated spammer.
+ * Environment Security: Utilizes .env files and os.getenv to ensure sensitive credentials (Google App Passwords) are never hardcoded or leaked.
+🚀 Technical Highlights
+ * Atomic Transactions: Contacts are only moved to the "finished" database after a confirmed SMTP "250 OK" status, preventing data loss or duplicate sends.
+ * Modular Architecture: Clean separation of concerns between SMTP networking, HTML template rendering, and CSV database management.
+ * Robust Error Handling: Integrated logging system that monitors every step, from authentication to final delivery.
+🛠️ Project Structure
 smtp_email_sender/
-├── core/ # Core engine (SMTP, Rate Limit, Retries)
-├── config/ # Configuration (Paths, SMTP settings, Limits)
-├── data/ # CSV Databases (Pending and Finished contacts)
-├── templates/ # HTML and Plain Text email templates
-├── utils/ # Logging and auxiliary tools
-├── attachments/ # PDF Resume storage
-└── main.py # Application entry point
+├── core/       # Core engine (SMTP logic, Rate Limiting, Retries)
+├── config/     # Configuration (Paths, SMTP settings, Daily Limits)
+├── data/       # CSV Databases (Pending and Finished contacts)
+├── templates/  # Personalizable HTML and Plain Text templates
+├── utils/      # Logging and auxiliary system tools
+└── runner.py   # Main campaign orchestrator
 
-```
-
-## ⚙️ Setup & Installation
-
-1. **Clone the repository:**
-```bash
-git clone [https://github.com/your-username/smtp_email_sender.git](https://github.com/RicsonRamos/smtp_email_sender.git)
+⚙️ Setup & Installation
+ * Clone & Install:
+   git clone https://github.com/RicsonRamos/smtp_email_sender.git
 cd smtp_email_sender
-
-```
-
-
-2. **Create a Virtual Environment:**
-```bash
-python -m venv .venv
-source .venv/bin/activate # Windows: .\.venv\Scripts\activate
-
-```
-
-
-3. **Install Dependencies:**
-```bash
 pip install -r requirements.txt
 
-```
+ * Environment Variables: Create a .env file with your SENDER_EMAIL and APP_PASSWORD.
+ * Data Preparation: Add your target list to data/contacts.csv.
+ * Execution:
+   python runner.py
 
+⚖️ Ethical Usage
+This system was built for legitimate, personalized communication. The integration of Rate Limiting and Jitter ensures the integrity of your account while respecting global email delivery standards.
+Developed by Spoke | ⚖️ Resilience-Driven Automation for Data-Centric Software.
 
-4. **Configure Environment Variables:**
-Create a `.env` file in the root directory:
-```text
-SENDER_EMAIL=your-email@gmail.com
-APP_PASSWORD=your-google-app-password
-
-```
-
-
-5. **Prepare your Data:**
-* Add your contacts to `data/contacts.csv`.
-* Place your `resume.pdf` in the `attachments/` folder.
-
-
-
-## 📈 Usage
-
-Simply run the main orchestrator:
-
-```bash
-python runner.py
-
-```
-
-The system will automatically:
-
-1. Load pending contacts.
-2. Authenticate securely with Gmail.
-3. Build personalized HTML emails for each law firm.
-4. Send them respecting the configured rate limits.
-5. Log every step and move successful contacts to `finished.csv`.
-
-## 🛡️ Security Note
-
-This project uses **Google App Passwords**. Never use your primary account password. The `.env` file is included in `.gitignore` to prevent accidental credential leaks.
-
----
-
-Developed by **Spoke** | ⚖️ Focused on Legal Career Automation.
