@@ -29,7 +29,7 @@ pip install -r requirements.txt
  * Environment Variables: Create a .env file with your SENDER_EMAIL and APP_PASSWORD.
  * Data Preparation: Add your target list to data/contacts.csv.
  * Execution:
-   python runner.py
+   python main.py
 
 ⚖️ Ethical Usage
 
