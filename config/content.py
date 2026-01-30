@@ -4,7 +4,7 @@ import os
 EMAIL_SUBJECT = "Internship Application - Criminal Law - {company}"
 
 # Define your professional persona here
-SENDER_NAME = ""
+SENDER_NAME = "c"
 
 # Logic to pull body text from email.txt
 def load_body_template():
