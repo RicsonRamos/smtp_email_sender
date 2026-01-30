@@ -93,23 +93,3 @@ This project uses **Google App Passwords**. Never use your primary account passw
 ---
 
 Developed by **Spoke** | ⚖️ Focused on Legal Career Automation.
-
-```
-
----
-
-### 💡 Additional Tips for GitHub:
-
-1. **Screenshot:** Add an image or GIF of the terminal running the script (like that log you sent me). This gives "life" to the project.
-
-2. **`requirements.txt`:** Don't forget to create it. Just run:
-
-```bash
-pip freeze > requirements.txt
-
-```
-3. **About on GitHub:** On the right side of the repository page, fill in the "About" section with keywords: `Python`, `SMTP`, `Automation`, `Software Engineering`.
-
-**What do you think of this README, Spoke?** Do you want me to add a specific section about how you customized the Criminal Law templates, or are we ready for the final commit?
-
-```
