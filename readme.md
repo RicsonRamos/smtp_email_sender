@@ -32,6 +32,8 @@ pip install -r requirements.txt
    python runner.py
 
 ⚖️ Ethical Usage
+
 This system was built for legitimate, personalized communication. The integration of Rate Limiting and Jitter ensures the integrity of your account while respecting global email delivery standards.
-Developed by Spoke | ⚖️ Resilience-Driven Automation for Data-Centric Software.
+
+Developed by Ricson  Ramos| ⚖️ Resilience-Driven Automation for Data-Centric Software.
 
