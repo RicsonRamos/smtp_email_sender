@@ -6,77 +6,79 @@ from core.rate_limit import RateLimiter
 from core.retry import wait_for_retry
 from utils.logger import log_event
 from config.limits import DAILY_LIMIT
+# Importando os helpers refatorados
+from utils.helpers import ensure_directory, clean_text
 
 def run_campaign():
     """
-    Orchestrates the email sending process: 
-    loads contacts, builds messages, sends them sequentially, 
-    and handles rate limits and retries.
+    Orchestrates the email campaign with integrated sanitization and environment checks.
     """
+    # 1. PRE-FLIGHT CHECKS: Ensure required directories exist
+    ensure_directory("data")
+    ensure_directory("logs")
+    ensure_directory("attachments")
+
     limiter = RateLimiter()
     contacts = load_contacts()
     
     if not contacts:
-        log_event("⚠️ No contacts found in the pending list. Aborting.")
+        log_event("⚠️ No contacts found. Aborting.")
         return
 
     total_contacts = len(contacts)
-    log_event(f"📊 {total_contacts} contacts loaded. Daily limit is {DAILY_LIMIT}.")
+    log_event(f"📊 {total_contacts} contacts loaded. Daily limit: {DAILY_LIMIT}.")
 
     server = None
     try:
-        # Start SMTP Connection
         server = connect()
         
-        # Using enumerate to track the current index for the 'last-email' check
         for index, contact in enumerate(contacts):
-            
-            # 1. Check if we hit the 50-email daily cap
             if not limiter.can_send():
-                log_event(f"🛑 Daily limit of {DAILY_LIMIT} reached. Stopping campaign for today.")
+                log_event(f"🛑 Daily limit of {DAILY_LIMIT} reached.")
                 break
             
-            company = contact['company']
-            email = contact['email']
+            # 2. DATA SANITIZATION: Cleaning company and email strings
+            company = clean_text(contact.get('company'))
+            email = clean_text(contact.get('email'))
 
-            # 2. Attempt to send the email
+            if not email:
+                log_event(f"⚠️ Skipping invalid contact at index {index}")
+                continue
+
+            # 3. EXECUTION
             success, error = send_single_email(server, company, email)
             
-            # 3. Process Results
             if success:
                 save_finished_contact(company, email, "SUCCESS")
                 remove_contact(company, email)
                 limiter.register_send()
                 log_event(f"✅ {limiter.get_status()}")
 
-                # 4. Smart Wait: Only wait if there are more contacts to process
                 if index < total_contacts - 1:
                     limiter.wait()
                 else:
-                    log_event("🏁 Last contact reached. Closing application immediately.")
+                    log_event("🏁 Last contact reached. Closing app.")
             else:
-                # Log failure but continue to the next contact
                 save_finished_contact(company, email, "FAILED", error=error)
-                log_event(f"❌ Permanent failure for {company} ({email}): {error}")
+                log_event(f"❌ Permanent failure for {company}: {error}")
 
     except Exception as e:
-        log_event(f"🔥 Critical failure during campaign execution: {e}")
+        log_event(f"🔥 Critical failure: {e}")
     finally:
         if server:
             disconnect(server)
 
 def send_single_email(server, company, email):
     """
-    Handles the building and sending of one email, including internal retries.
-    Returns: (bool success, str error_message)
+    Handles internal retries for a single email attempt.
     """
     attempts = 0
     max_retries = 3
     
     while attempts < max_retries:
         try:
-            # Note: Using your name 'Spoke' for the template
-            msg = build_message(company, email, "Spoke")
+            # Personalization with 'Spoke'
+            msg = build_message(company, email, "Spoke") 
             if msg:
                 server.send_message(msg)
                 return True, None
@@ -87,8 +89,7 @@ def send_single_email(server, company, email):
                 wait_for_retry(attempts)
             else:
                 return False, str(e)
-    
-    return False, "Maximum retries reached"
+    return False, "Max retries reached"
 
 if __name__ == "__main__":
     run_campaign()
