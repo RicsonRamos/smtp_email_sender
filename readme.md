@@ -24,21 +24,13 @@ To use this script with Gmail, you **must** use an **App Password**.
 4.  **Copy & Save:** Save the 16-character code. You will paste it into the `.env` file.
 
 
+## ⚙️ Quick Start
 
-## ⚙️ Setup & Installation
-
-1.  **Clone & Install:**
-    ```bash
-    git clone [https://github.com/RicsonRamos/smtp_email_sender.git](https://github.com/RicsonRamos/smtp_email_sender.git)
-    cd smtp_email_sender
-    pip install -r requirements.txt
-    ```
-
-2.  **Environment Variables:** Create a file named `.env` in the root folder:
-    ```text
-    SENDER_EMAIL=your-email@gmail.com
-    APP_PASSWORD=xxxx-xxxx-xxxx-xxxx  # Your 16-digit Google App Password
-    ```
+1. **Clone & Initialize:**
+   ```bash
+   git clone [https://github.com/RicsonRamos/smtp_email_sender.git](https://github.com/RicsonRamos/smtp_email_sender.git)
+   cd smtp_email_sender
+   python init_setup.py
 
 ## 📝 Customization Guide (How to Personalize)
 
