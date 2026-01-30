@@ -1,4 +1,3 @@
-```markdown
 # 📧 Smart & Resilient SMTP Automator
 
 A professional-grade Python automation engine designed for **secure**, **automated**, and **anti-blocking** email campaigns. This project features a modern **Streamlit Dashboard** for real-time management and is fully **Dockerized** for consistent deployment.
@@ -13,8 +12,8 @@ Unlike basic scripts that trigger spam filters, this engine implements advanced 
 
 * **Intelligent Rate Limiting:** Randomized delays between sends to mimic human pacing.
 * **Resilient Execution:** Automated retry mechanism with intelligent error handling.
-* **Dynamic Personalization:** Injects recipient data (like Company Name) into subjects and bodies in real-time.
-* **Session Security:** Credentials are handled via environment variables, never hardcoded.
+* **Dynamic Personalization:** Injects recipient data (like `{company}`) into subjects and bodies in real-time.
+* **Session Security:** Credentials are handled via environment variables and secure UI inputs, never hardcoded.
 
 ---
 
@@ -23,21 +22,27 @@ Unlike basic scripts that trigger spam filters, this engine implements advanced 
 To use this script with Gmail, you **must** use an **App Password**:
 
 1.  **Enable 2FA:** Turn on 2-Step Verification in your [Google Security Settings](https://myaccount.google.com/security).
-2.  **Generate Password:** Search for "App Passwords", select "Mail", and name it (e.g., "SMTP Automator").
-3.  **Secure the Code:** Save the 16-character code. You will paste it into the App Sidebar.
+2.  **Generate Password:** Search for "App Passwords", select "Mail" (or "Other"), and name it `SMTP Automator`.
+3.  **Secure the Code:** Google will show a 16-character code. **Copy it.** You will paste this into the App Sidebar during execution.
 
 ---
 
 ## ⚙️ Quick Start
 
 ### 1. Installation
-Clone the repository and install dependencies:
+Clone the repository and set up your virtual environment:
+
 ```bash
+# Clone the repository
 git clone [https://github.com/RicsonRamos/smtp_email_sender.git](https://github.com/RicsonRamos/smtp_email_sender.git)
 cd smtp_email_sender
-pip install -r requirements.txt
 
-```
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 
 ### 2. Launching the Dashboard
 
