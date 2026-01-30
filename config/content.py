@@ -1,20 +1,20 @@
-# config/content.py
+# Edit the email subject here
+# The {company} placeholder will be automatically filled by the runner
+EMAIL_SUBJECT = "Internship Application - Criminal Law - {company}"
 
-# Edite o assunto aqui
-EMAIL_SUBJECT = "Candidatura a Estágio - Área Penal - {empresa}"
-
-# Edite o corpo do e-mail aqui (para a versão texto simples)
+# Edit the email body here (for the plain text version)
+# This serves as a professional fallback for the HTML template
 EMAIL_BODY_TEXT = """
-Prezados(as),
+Dear Hiring Team,
 
-Meu nome é {nome}, sou estudante de Direito e tenho interesse em uma oportunidade de estágio na área penal junto ao escritório {empresa}.
+My name is {sender_name}. I am a Law student highly interested in an internship opportunity in the Criminal Law department at {company}.
 
-Possuo grande interesse na advocacia criminal, comprometimento com estudo contínuo e disponibilidade para aprender e contribuir com a equipe.
+I have a strong passion for criminal defense, a commitment to continuous learning, and full availability to contribute to your team's success.
 
-Anexo envio meu currículo para apreciação.
+Please find my resume attached for your consideration.
 
-Fico à disposição para uma conversa.
+I look forward to the possibility of discussing how I can contribute to your firm.
 
-Atenciosamente,
-{nome}
+Best regards,
+{sender_name}
 """
