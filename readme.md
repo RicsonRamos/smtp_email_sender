@@ -74,7 +74,7 @@ APP_PASSWORD=your-google-app-password
 Simply run the main orchestrator:
 
 ```bash
-python main.py
+python runner.py
 
 ```
 
