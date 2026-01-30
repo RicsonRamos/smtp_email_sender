@@ -1,7 +1,10 @@
-{greeting}
+Hello Team at {company},
 
-I am applying for an internship at {company_name}.
-Attached are my documents.
+I'm {sender_name}, and I've been following the work you do. 
 
-Best regards,
+I am currently running some connectivity tests and I wanted to reach out to see how your team handles automated workflows. 
+
+If you have a moment, I'd love to chat about the tech stack you're using.
+
+Live long and prosper,
 {sender_name}
