@@ -41,5 +41,9 @@ jobs:
     - name: Test with pytest
       env:
         PYTHONPATH: .
+        SENDER_EMAIL: test@example.com
+        APP_PASSWORD: fake_password_for_testing
+        SMTP_SERVER: smtp.example.com
+        SMTP_PORT: 587
       run: |
         pytest
