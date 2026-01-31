@@ -46,4 +46,5 @@ jobs:
         SMTP_SERVER: smtp.example.com
         SMTP_PORT: 587
       run: |
+        mkdir -p logs  # <--- Isso cria a pasta necessária
         pytest
