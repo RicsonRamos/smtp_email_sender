@@ -1,6 +1,9 @@
 import logging
 from config.paths import LOG_FILE
 
+# Garante que o diretório de logs exista antes de instanciar o FileHandler
+LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
